@@ -1,86 +1,32 @@
-export default function CTotalCurrency(
-    {totalCurrencyAmount, setTotalCurrencyAmount, onCalculate}:
+import {addCommasToNumber, numberToWords} from "@/app/utils";
+
+export default function CTotalPrice(
+    {totalCurrencyPrice, setTotalCurrencyPrice}:
         {
-            totalCurrencyAmount: number,
-            setTotalCurrencyAmount: any,
-            onCalculate: Function
+            totalCurrencyPrice: number,
+            setTotalCurrencyPrice: any
         }) {
-    return <form onSubmit={(e) => {
-        e.preventDefault();
-        if(onCalculate) onCalculate();
-    }}>
-        <div className={'flex flex-row mb-8 gap-x-2'}>
-            <div>Total Purchase Amount: </div>
-            <div className={'flex flex-col gap-y-1'}>
-                <div className={'flex flex-row gap-x-2'}>
-                    <input
-                        className={'text-black px-2'}
-                        value={totalCurrencyAmount}
-                        type={'number'}
-                        onChange={(e: any) => {
-                            e.preventDefault();
-                            setTotalCurrencyAmount(e.target.value);
-                        }}
-                        onSubmit={(e: any) => {
-                            e.preventDefault();
-                        }}
-                    />
-                    <button className={'border border-gray-400 px-2 text-sm'}>Calculate</button>
-                </div>
-                <div className={'text-xs'}>{numberToWords(totalCurrencyAmount).slice(0, 50)}</div>
+    return <div className={'flex flex-col items-center'}>
+        <div className={'flex flex-row gap-x-2 mb-2'}>
+            <div className={'w-[200px]'}>Total Purchase Price: </div>
+            <div className={'flex flex-row gap-x-2'}>
+                <input
+                    className={'text-black px-2'}
+                    value={totalCurrencyPrice}
+                    type={'number'}
+                    onChange={(e: any) => {
+                        e.preventDefault();
+                        if(parseInt(e.target.value) < 0) setTotalCurrencyPrice(0);
+                        setTotalCurrencyPrice(e.target.value);
+                    }}
+                    onSubmit={(e: any) => {
+                        e.preventDefault();
+                    }}
+                />
             </div>
         </div>
-    </form>
-}
-
-function numberToWords(num: number): string {
-    const units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
-    const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-    const tens = ['', 'Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-
-    function convertThreeDigits(n: number): string {
-        const hundred = Math.floor(n / 100);
-        const remainder = n % 100;
-        const str = [];
-
-        if (hundred !== 0) {
-            str.push(`${units[hundred]} Hundred`);
-        }
-
-        if (remainder !== 0) {
-            if (remainder < 10) {
-                str.push(units[remainder]);
-            } else if (remainder < 20) {
-                str.push(teens[remainder - 10]);
-            } else {
-                const ten = Math.floor(remainder / 10);
-                const unit = remainder % 10;
-                str.push(tens[ten]);
-                if (unit !== 0) {
-                    str.push(units[unit]);
-                }
-            }
-        }
-
-        return str.join(' ');
-    }
-
-    const suffixes = ['', 'Thousand', 'Million', 'Billion', 'Trillion', 'Quadrillion']; // 등급에 따른 단위
-
-    if (num === 0) {
-        return 'Zero';
-    }
-
-    let i = 0;
-    let words = '';
-
-    while (num > 0) {
-        if (num % 1000 !== 0) {
-            words = `${convertThreeDigits(num % 1000)} ${suffixes[i]} ${words}`;
-        }
-        num = Math.floor(num / 1000);
-        i++;
-    }
-
-    return words.trim();
+        <div className={'text-xs'}>
+            {`${addCommasToNumber(totalCurrencyPrice)} (${numberToWords(totalCurrencyPrice).slice(0, 50)})`}
+        </div>
+    </div>
 }
