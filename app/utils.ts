@@ -50,30 +50,94 @@ export function numberToWords(num: number): string {
     return words.trim();
 }
 
-export function addCommasToNumber(num: number): string {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export function numberToKoreanWords(num: number): string {
+    const units = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
+    const largeUnits = ['', '만', '억', '조', '경']; // 원하는 단위로 변경 가능
+
+    function convertFourDigits(n: number): string {
+        const thousand = Math.floor(n / 1000);
+        const remainder = n % 1000;
+        const str = [];
+
+        if (thousand !== 0) {
+            str.push(`${units[thousand]}천`);
+        }
+
+        const hundred = Math.floor(remainder / 100);
+        if (hundred !== 0) {
+            str.push(`${units[hundred]}백`);
+        }
+
+        const ten = Math.floor((remainder % 100) / 10);
+        if (ten !== 0) {
+            str.push(`${units[ten]}십`);
+        }
+
+        const unit = remainder % 10;
+        if (unit !== 0) {
+            str.push(units[unit]);
+        }
+
+        return str.join('');
+    }
+
+    if (num === 0) {
+        return '영';
+    }
+
+    let i = 0;
+    let words = '';
+
+    while (num > 0) {
+        if (num % 10000 !== 0) {
+            const converted = convertFourDigits(num % 10000);
+            words = `${converted ? converted + largeUnits[i] : ''}${words}`;
+        }
+        num = Math.floor(num / 10000);
+        i++;
+    }
+
+    return words.trim();
 }
 
-export function calculateProbability(n: number, m: number) {
-    // 팩토리얼을 계산하는 함수
-    const factorial = (num: number): number => {
-        if (num <= 1) return 1;
-        return num * factorial(num - 1);
-    };
+export function getFormattedNumber(value: number, fraction: number = 6): string {
+    return value.toLocaleString(undefined, { minimumFractionDigits: fraction });
+}
 
-    // 조합을 계산하는 함수
-    const combination = (n: number, m: number) => {
-        return factorial(n) / (factorial(m) * factorial(n - m));
-    };
+// 소수점 아래의 숫자를 특정 자릿수까지 표시. 만약에 아래에 0이 있다면 제거하여 표시
+export function getFloatingPointNumber(num: number, fractionDigits: number): string {
+    if(num === undefined || !num) return '';
+    try {
+        let formatted = num.toFixed(fractionDigits);
+        while (formatted.includes('.') && (formatted.endsWith('0') || formatted.endsWith('.'))) {
+            formatted = formatted.slice(0, -1);
+        }
 
-    // n개 중에서 m개를 뽑을 경우의 수 계산
-    const numberOfCombinations = combination(n, m);
+        if(formatted.includes('.')) {
+            let integer = formatted.split('.')[0];
+            let fraction = formatted.split('.')[1];
+            let formattedInteger = getFormattedNumber(parseInt(integer), 0);
+            return `${formattedInteger}.${fraction}`;
+        }
+        return getFormattedNumber(parseInt(formatted), 0);
+    } catch(e) {
+        return '';
+    }
+}
 
-    // 전체 경우의 수는 n개 중에서 아무거나 선택하는 경우의 수와 같음
-    const totalNumberOfOptions = Math.pow(2, n);
+function calculateSpecificBallsProbability(totalBalls: number, ballsToPick: number, specificBalls: number[]) {
+    // 특정한 공을 뽑을 경우의 수 계산
+    const specificCombinations = specificBalls.reduce((acc, ball) => {
+        const remainingBalls = totalBalls - ball;
+        const remainingBallsToPick = ballsToPick - specificBalls.length + 1;
+        return (acc * remainingBallsToPick) / remainingBalls;
+    }, 1);
+
+    // 전체 경우의 수
+    const totalPossibilities = Math.pow(totalBalls, ballsToPick);
 
     // 확률 계산
-    const probability = numberOfCombinations / totalNumberOfOptions;
+    const probability = specificCombinations / totalPossibilities;
 
     return probability;
 }

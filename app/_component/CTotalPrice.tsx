@@ -1,4 +1,4 @@
-import {addCommasToNumber, numberToWords} from "@/app/utils";
+import {getFloatingPointNumber, getFormattedNumber, numberToKoreanWords, numberToWords} from "@/app/utils";
 
 export default function CTotalPrice(
     {totalCurrencyPrice, setTotalCurrencyPrice}:
@@ -26,7 +26,7 @@ export default function CTotalPrice(
             </div>
         </div>
         <div className={'text-xs'}>
-            {`${addCommasToNumber(totalCurrencyPrice)} (${numberToWords(totalCurrencyPrice).slice(0, 50)})`}
+            {`${getFloatingPointNumber(totalCurrencyPrice, 0)} (${numberToWords(totalCurrencyPrice).slice(0, 50)}, ${numberToKoreanWords(totalCurrencyPrice)})`}
         </div>
     </div>
 }

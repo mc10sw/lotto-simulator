@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import CFooter from "@/app/CFooter";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+      <div className={'relative w-full h-screen'}>
+        <div className={'w-full h-full overflow-y-scroll'}>{children}</div>
+        <div className={'absolute w-full left-0 bottom-0'}><CFooter/></div>
+      </div>
+      </body>
     </html>
   )
 }
