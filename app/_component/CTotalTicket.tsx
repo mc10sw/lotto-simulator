@@ -1,6 +1,6 @@
 import {getFloatingPointNumber, getFormattedNumber, numberToKoreanWords, numberToWords} from "@/app/utils";
 
-export default function CTotalPrice(
+export default function CTotalTicket(
     {totalCurrencyPrice, setTotalCurrencyPrice}:
         {
             totalCurrencyPrice: number,
@@ -8,7 +8,7 @@ export default function CTotalPrice(
         }) {
     return <div className={'flex flex-col items-center'}>
         <div className={'flex flex-row gap-x-2 mb-2'}>
-            <div className={'w-[200px]'}>Total Purchase Price: </div>
+            <div className={'w-[200px]'}>Total Purchased Ticket: </div>
             <div className={'flex flex-row gap-x-2'}>
                 <input
                     className={'text-black px-2'}
@@ -17,7 +17,7 @@ export default function CTotalPrice(
                     onChange={(e: any) => {
                         e.preventDefault();
                         if(parseInt(e.target.value) < 0) setTotalCurrencyPrice(0);
-                        setTotalCurrencyPrice(e.target.value);
+                        setTotalCurrencyPrice(parseInt(e.target.value));
                     }}
                     onSubmit={(e: any) => {
                         e.preventDefault();
@@ -26,7 +26,7 @@ export default function CTotalPrice(
             </div>
         </div>
         <div className={'text-xs'}>
-            {`${getFloatingPointNumber(totalCurrencyPrice, 0)} (${numberToWords(totalCurrencyPrice).slice(0, 50)}, ${numberToKoreanWords(totalCurrencyPrice)})`}
+            {`${getFloatingPointNumber(totalCurrencyPrice, 0)} (${numberToWords(totalCurrencyPrice).slice(0, 40)}, ${numberToKoreanWords(totalCurrencyPrice)})`}
         </div>
     </div>
 }

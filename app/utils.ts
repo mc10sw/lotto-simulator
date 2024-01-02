@@ -52,7 +52,7 @@ export function numberToWords(num: number): string {
 
 export function numberToKoreanWords(num: number): string {
     const units = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
-    const largeUnits = ['', '만', '억', '조', '경']; // 원하는 단위로 변경 가능
+    const largeUnits = [' ', '만 ', '억 ', '조 ', '경 ']; // 원하는 단위로 변경 가능
 
     function convertFourDigits(n: number): string {
         const thousand = Math.floor(n / 1000);
@@ -123,6 +123,11 @@ export function getFloatingPointNumber(num: number, fractionDigits: number): str
     } catch(e) {
         return '';
     }
+}
+
+export function convertToPercentage(num: number): string {
+    const percentage = (num * 100).toFixed(7); // 숫자를 백분율로 변환하고 소수점 이하 두 자리까지 유지
+    return `${percentage}%`;
 }
 
 function calculateSpecificBallsProbability(totalBalls: number, ballsToPick: number, specificBalls: number[]) {
