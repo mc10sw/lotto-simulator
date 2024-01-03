@@ -4,6 +4,7 @@ export default function CResultTableItem(
 	{
 		index,
 		bonus,
+		결과값개수,
 		결과기대값목록,
 		당첨금액목록,
 		set당첨금액목록,
@@ -14,6 +15,7 @@ export default function CResultTableItem(
 	}: {
 		index: number
 		bonus?: boolean
+		결과값개수: number
 		결과기대값목록: number[]
 
 		당첨금액목록: number[]
@@ -29,7 +31,7 @@ export default function CResultTableItem(
 
 		총티켓구매금액: number
 }) {
-	const length = 결과기대값목록.length;
+	const length = 결과값개수;
 	return <div
 		className={'flex flex-row items-center gap-x-4 mb-2'}>
 		<div className={'w-[24px]'}>{`${length - index}${bonus?'+1':''}`}</div>

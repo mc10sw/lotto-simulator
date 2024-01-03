@@ -3,6 +3,7 @@ import CResultTableItem from "@/app/_component/CResultTableItem";
 export default function CResultTable(
     props:
         {
+            결과값개수: number
             결과기대값목록: number[]
             보너스결과기대값목록: number[]
             당첨금액목록: number[]
@@ -20,6 +21,7 @@ export default function CResultTable(
             총티켓구매금액: number
         })
 {
+
     return <div className={'flex flex-col items-start mb-8'}>
         <div className={'flex flex-row gap-x-4 mb-4'}>
             <div className={'text-sm font-medium w-[24px]'}>{'#'}</div>
@@ -28,7 +30,7 @@ export default function CResultTable(
             <div className={'text-sm font-medium'}>{'Win Price Amount/Ratio'}</div>
         </div>
         {
-            props.결과기대값목록.map((amount, index) => {
+            Array.from({ length: props.결과값개수 }).map((amount, index) => {
                 return <div
                     key={`result_${index}`}
                     className={'flex flex-col'}>
@@ -36,6 +38,7 @@ export default function CResultTable(
                         key={`result_${index}_bonus`}
                         index={index}
                         bonus={true}
+                        결과값개수={props.결과값개수}
                         결과기대값목록={props.보너스결과기대값목록}
                         당첨금액목록={props.보너스당첨금액목록}
                         set당첨금액목록={props.set보너스당첨금액목록}
@@ -49,6 +52,7 @@ export default function CResultTable(
                     <CResultTableItem
                         key={`result_${index}_no_bonus`}
                         index={index}
+                        결과값개수={props.결과값개수}
                         결과기대값목록={props.결과기대값목록}
                         당첨금액목록={props.당첨금액목록}
                         set당첨금액목록={props.set당첨금액목록}
