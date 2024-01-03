@@ -5,8 +5,9 @@ import {useEffect, useState} from "react";
 import CTotalTicket from "@/app/_component/CTotalTicket";
 import CTicketPrice from "@/app/_component/CTicketPrice";
 import CBallInfo from "@/app/_component/CBallInfo";
-import {getFloatingPointNumber, numberToKoreanWords, numberToWords} from "@/app/utils";
 import CResultValues from "@/app/_component/CResultValues";
+import { combination } from 'js-combinatorics';
+import {countCombinations} from "@/app/utils";
 
 export default function Home() {
 
@@ -19,11 +20,10 @@ export default function Home() {
     const [보너스여부, set보너스여부] = useState(false);
 
     const [티켓가격, set티켓가격] = useState(1000);
+    const [티켓가격비율여부목록, set티켓가격비율여부목록] = useState([true, true, true, false, false, false])
     const [총티켓구매수량, set총티켓구매수량] = useState(0);
 
-
-    const [당첨확률목록, set당첨확률목록] = useState([0, 0, 0, 0, 0, 0]);
-    const [ticketCount, setTicketCount] = useState([0, 0, 0, 0, 0, 0])
+    const [당첨확률목록, set당첨확률목록] = useState<number[]>([0, 0, 0, 0, 0, 0]);
 
     const [당첨금액목록, set당첨금액목록] = useState([0.375, 0.065, 0.065, 100000, 5000, 0])
 
@@ -37,14 +37,13 @@ export default function Home() {
     }, [])
 
     function getWinRate() {
+        const totalCombinations = combination(총볼갯수, 당첨볼갯수);
         const tempWinRateList = 당첨금액목록.map((_, index) => {
-            let prob = 1;
-            for(let i=0; i<=index; i++) {
-                console.log(`## ${i+1} matches: ${prob} * (${당첨볼갯수-i}/${총볼갯수-i}) = ${prob * ((당첨볼갯수-i)/(총볼갯수-i))}`)
-                prob = prob * ((당첨볼갯수-i)/(총볼갯수-i));
-            }
-            return prob;
-        }).reverse();
+            const prob = combination(당첨볼갯수, 당첨볼갯수-index) * combination(총볼갯수-당첨볼갯수, index);
+            const probability = Number(prob) / Number(totalCombinations);
+            console.log(`## probability(${index+1}) = (${당첨볼갯수}C${당첨볼갯수-index}*${총볼갯수-당첨볼갯수}C${index})/${Number(totalCombinations)} = ${Number(prob)}/${Number(totalCombinations)} = ${probability}`);
+            return probability;
+        });
         set당첨확률목록(tempWinRateList);
         return tempWinRateList;
     }
@@ -68,12 +67,11 @@ export default function Home() {
 
         let totalAmount = 0;
         const 기대값목록 = 당첨금액목록.map((_, index) => {
-            const amount = 당첨금액목록[index] < 1 ?
+            const amount = 티켓가격비율여부목록[index] ?
                 // 상금 배수 (고등수) => 기댓값
-                winRateList[index] * 당첨금액목록[index] * 총티켓구매수량 * 티켓가격:
+                총구매금액 * 당첨금액목록[index] :
                 // 상금 가격 (저등수)
                 winRateList[index] * 당첨금액목록[index] * 총티켓구매수량;
-            console.log(`## expected amount: ${당첨금액목록[index] < 1 ? `${winRateList[index]} * ${당첨금액목록[index]} * ${총티켓구매수량} * ${티켓가격}` : `${winRateList[index]} * ${당첨금액목록[index]} * ${총티켓구매수량}`} => ${amount}`);
             totalAmount += amount
             return amount;
         })
@@ -101,8 +99,15 @@ export default function Home() {
                 </div>
             </div>
             <CResultTable
-                ticketCount={ticketCount} expectedAmount={결과기대값목록} winPriceAmount={당첨금액목록} setWinPriceAmount={set당첨금액목록} winRateList={당첨확률목록} totalPurchaseAmount={총티켓구매금액}/>
-            <CResultValues ticketCount={ticketCount} totalTicketPurchaseAmount={총티켓구매금액} totalPrizeAmount={결과기대값총합}/>
+                결과기대값목록={결과기대값목록}
+                당첨금액목록={당첨금액목록}
+                set당첨금액목록={set당첨금액목록}
+                당첨확률목록={당첨확률목록}
+                총티켓구매금액={총티켓구매금액}
+                티켓가격비율여부목록={티켓가격비율여부목록}
+                set티켓가격비율여부목록={set티켓가격비율여부목록}
+            />
+            <CResultValues totalTicketPurchaseAmount={총티켓구매금액} totalPrizeAmount={결과기대값총합}/>
         </div>
     )
 }

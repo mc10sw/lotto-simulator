@@ -130,6 +130,27 @@ export function convertToPercentage(num: number): string {
     return `${percentage}%`;
 }
 
+export function countCombinations(n: number, k: number): number {
+    if (k === 0 || k === n) {
+        return 1; // k가 0이거나 n과 같으면 경우의 수는 각각 1개입니다.
+    }
+
+    // 파스칼의 삼각형을 이용한 조합의 수 계산
+    const dp: number[][] = [];
+    for (let i = 0; i <= n; i++) {
+        dp[i] = [];
+        for (let j = 0; j <= Math.min(i, k); j++) {
+            if (j === 0 || j === i) {
+                dp[i][j] = 1;
+            } else {
+                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+            }
+        }
+    }
+
+    return dp[n][k];
+}
+
 function calculateSpecificBallsProbability(totalBalls: number, ballsToPick: number, specificBalls: number[]) {
     // 특정한 공을 뽑을 경우의 수 계산
     const specificCombinations = specificBalls.reduce((acc, ball) => {

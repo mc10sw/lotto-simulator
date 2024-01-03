@@ -1,10 +1,10 @@
-import {convertToPercentage, getFloatingPointNumber, numberToKoreanWords, numberToWords} from "@/app/utils";
+import {getFloatingPointNumber, numberToKoreanWords, numberToWords} from "@/app/utils";
 
-export default function CResultValues({ticketCount, totalTicketPurchaseAmount, totalPrizeAmount}:
-{ticketCount: number[], totalTicketPurchaseAmount: number, totalPrizeAmount: number}) {
+export default function CResultValues({ totalTicketPurchaseAmount, totalPrizeAmount}:
+{totalTicketPurchaseAmount: number, totalPrizeAmount: number}) {
     const margin = totalTicketPurchaseAmount-totalPrizeAmount;
     return <div className={'w-full flex flex-col items-center'}>
-        <div className={'flex flex-col w-1/2 mt-4 pb-4 border-b border-gray-400'}>
+        <div className={'flex flex-col w-screen md:w-[560px] mt-4 pb-4 border-b border-gray-400 px-6'}>
             <div className={'flex flex-row justify-between'}>
                 <span>{`Total Sales Amount: `}</span>
                 <span>{getFloatingPointNumber(totalTicketPurchaseAmount,0)}</span>
@@ -16,7 +16,7 @@ export default function CResultValues({ticketCount, totalTicketPurchaseAmount, t
             </div>
             <div className={'text-xs text-end'}>{`(${numberToWords(totalPrizeAmount).slice(0, 40)}, ${numberToKoreanWords(totalPrizeAmount)})`}</div>
         </div>
-        <div className={'flex flex-col w-1/2 mt-4 pb-4 border-b border-gray-400'}>
+        <div className={'flex flex-col w-screen md:w-[560px] mt-4 pb-4 border-b border-gray-400 px-6'}>
             <div className={`flex flex-row justify-between mt-4`}>
                 <span>Margin </span>
                 <span className={`${margin > 0 ? 'text-green-400' : 'text-red-400'}`}>
