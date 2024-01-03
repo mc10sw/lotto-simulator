@@ -99,9 +99,7 @@ export default function Home() {
         try {
             set결과값개수(length);
             // 게임 볼 수 변경 시 배열 크기 변경
-            console.log(`## onCalculate() >> 당첨볼갯수: ${당첨볼개수}, 결과기대값목록.length: ${결과기대값목록.length}`)
             if(length >= 결과기대값목록.length) {
-                console.log(`## onCalculate() >> 1`)
                 const new티켓가격비율여부목록 = [...티켓가격비율여부목록];
                 const new보너스티켓가격비율여부목록 = [...보너스티켓가격비율여부목록];
                 const new당첨확률목록 = [...당첨확률목록];
@@ -111,7 +109,6 @@ export default function Home() {
                 const new결과기대값목록 = [...결과기대값목록];
                 const new보너스결과기대값목록 = [...보너스결과기대값목록];
                 for(let i=결과기대값목록.length; i<length; i++) {
-                    console.log(`## push >> ${i}`);
                     new티켓가격비율여부목록.push(false);
                     new보너스티켓가격비율여부목록.push(false);
                     new당첨확률목록.push(0);
@@ -131,7 +128,6 @@ export default function Home() {
                 set보너스결과기대값목록(new보너스결과기대값목록)
             }
             else {
-                console.log(`## onCalculate() >> 2`)
                 set티켓가격비율여부목록([...티켓가격비율여부목록].slice(0, length))
                 set보너스티켓가격비율여부목록([...보너스티켓가격비율여부목록].slice(0, length))
                 set당첨확률목록([...당첨확률목록].slice(0, length))
@@ -144,42 +140,40 @@ export default function Home() {
 
             // @ts-ignore
             const {tempWinRateList, tempBonusWinRateList} = getWinRate(보너스여부, length);
-            console.log(`## onCalculate() tempWinRateList: ${JSON.stringify(tempWinRateList)}`)
-            console.log(`## onCalculate() tempBonusWinRateList: ${JSON.stringify(tempBonusWinRateList)}`)
             const 총구매금액 = 총티켓구매수량*티켓가격;
-            console.log(`## onCalculate() >> 4`)
             set총티켓구매금액(총구매금액);
             if(총티켓구매수량 < 0) {
                 setLoading(false);
                 return;
             }
 
-            console.log(`## onCalculate() >> 5`)
             let totalAmount = 0;
             const 기대값목록 = 당첨금액목록.map((_, index) => {
-                console.log(`## onCalculate() >> 5 >> index: ${index}, 당첨금액목록[index]: ${당첨금액목록[index]}, 티켓가격비율여부목록[index]: ${티켓가격비율여부목록[index]}, 당첨금액목록[index]: ${당첨금액목록[index]}`);
                 const amount = 티켓가격비율여부목록[index] ?
                     // 상금 배수 (고등수) => 기댓값
                     총구매금액 * 당첨금액목록[index] :
                     // 상금 가격 (저등수)
                     tempWinRateList[index] * 당첨금액목록[index] * 총티켓구매수량;
-                console.log(`## onCalculate() >> 5 >> amount: ${amount}`);
+                    // console.log(`## ${index} >> ${티켓가격비율여부목록[index] ? "고등수": "저등수"} >> ${티켓가격비율여부목록[index] ? `${총구매금액}*${당첨금액목록[index]}=${amount}` : `${tempWinRateList[index]}*${당첨금액목록[index]}*${총티켓구매수량}=${amount}`}`)
                 totalAmount += amount
                 return amount;
             })
-            console.log(`## onCalculate() >> 6`)
-            const 보너스기대값목록 = 보너스당첨금액목록.map((_, index) => {
-                const amount = 보너스티켓가격비율여부목록[index] ?
-                    // 상금 배수 (고등수) => 기댓값
-                    총구매금액 * 보너스당첨금액목록[index] :
-                    // 상금 가격 (저등수)
-                    tempBonusWinRateList[index] * 보너스당첨금액목록[index] * 총티켓구매수량;
-                totalAmount += amount
-                return amount;
-            })
-            console.log(`## onCalculate() >> 7`)
             set결과기대값목록(기대값목록);
-            set보너스결과기대값목록(보너스기대값목록);
+
+            if(보너스여부) {
+                const 보너스기대값목록 = 보너스당첨금액목록.map((_, index) => {
+                    const amount = 보너스티켓가격비율여부목록[index] ?
+                        // 상금 배수 (고등수) => 기댓값
+                        총구매금액 * 보너스당첨금액목록[index] :
+                        // 상금 가격 (저등수)
+                        tempBonusWinRateList[index] * 보너스당첨금액목록[index] * 총티켓구매수량;
+                    // console.log(`## ${index} >> ${티켓가격비율여부목록[index] ? "고등수": "저등수"} >> ${티켓가격비율여부목록[index] ? `${총구매금액}*${당첨금액목록[index]}=${amount}` : `${tempWinRateList[index]}*${당첨금액목록[index]}*${총티켓구매수량}=${amount}`}`)
+                    totalAmount += amount
+                    return amount;
+                })
+                set보너스결과기대값목록(보너스기대값목록);
+            }
+
             set결과기대값총합(totalAmount);
             setLoading(false);
         } catch(e: any) {
