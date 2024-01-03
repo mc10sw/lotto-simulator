@@ -37,10 +37,10 @@ export default function CBallInfo(
                 <input
                     type={'checkbox'}
                     checked={bonus}
-                    disabled={true}
                     onChange={(e: any) => {
-                        e.preventDefault();
-                        setBonus(e.target.setBonus);
+                        console.log(`## e.target.checked: ${e.target.checked}`);
+                        setBonus(e.target.checked);
+                        // e.preventDefault();
                     }}
                 />
             </div>
