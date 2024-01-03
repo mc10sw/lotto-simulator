@@ -19,8 +19,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
       <div className={'relative w-full h-screen'}>
-        <div className={'w-full h-full overflow-y-scroll'}>{children}</div>
-        <div className={'absolute w-full left-0 bottom-0'}><CFooter/></div>
+        <div className={'w-screen md:w-full h-full overflow-y-scroll'}>{children}</div>
+        <div className={'absolute w-screen md:w-full left-0 bottom-0'}><CFooter/></div>
       </div>
       </body>
     </html>

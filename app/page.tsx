@@ -184,55 +184,57 @@ export default function Home() {
     }
 
     return (
-        <div className={'w-full h-auto flex flex-col justify-center items-center pt-24 pb-36'}>
-            <div
-                style={{ whiteSpace: "pre-wrap" }}
-                className={`absolute top-0 right-0 px-4 pb-4 pt-4 w-[600px] h-auto bg-white text-sm text-black ${show공식 ? 'hidden 2xl:flex' : 'hidden'}`}>
-                {공식}
-            </div>
-            <button
-                onClick={() => { setShow공식(!show공식)}}
-                className={'absolute top-0 right-0 px-4 py-2 bg-gray-300 text-sm text-black hidden 2xl:flex'}>
-                {show공식 ? "HIDE" : "POP"}
-            </button>
-            <CTitle/>
-            <div className={'flex flex-col justify-start items-start gap-y-4 mb-12 p-6 border border-gray-400'}>
-                <CBallInfo pickBallCount={당첨볼개수} setPickBallCount={set당첨볼개수}
-                           totalBallCount={총볼갯수} totalPickBallCount={set총볼갯수}
-                           bonus={보너스여부} setBonus={(value: boolean) => {
-                    set보너스여부(value);
-                    getWinRate(value, 당첨볼개수)
-                }}
-                />
-                <CTicketPrice ticketPrice={티켓가격} setTicketPrice={set티켓가격}/>
-                <CTotalTicket totalCurrencyPrice={총티켓구매수량} setTotalCurrencyPrice={set총티켓구매수량}/>
-                <div className={'w-full flex flex-row justify-center mt-2'}>
-                    <button
-                        onClick={() => onCalculate(당첨볼개수)}
-                        className={`px-4 py-2 border ${loading ? 'text-gray-400 border-gray-400 ' : 'text-white border-white '}`}
-                        disabled={loading}
-                    >Calculate</button>
+        <div className={'w-full h-full h-auto flex flex-col justify-start items-start'} >
+            <div className={'w-[540px] md:w-full h-auto flex flex-col justify-center items-center pt-24 pb-36'}>
+                <div
+                    style={{ whiteSpace: "pre-wrap" }}
+                    className={`absolute top-0 right-0 px-4 pb-4 pt-4 w-[540px] h-auto bg-white text-sm text-black ${show공식 ? 'hidden 2xl:flex' : 'hidden'}`}>
+                    {공식}
                 </div>
+                <button
+                    onClick={() => { setShow공식(!show공식)}}
+                    className={'absolute top-0 right-0 px-4 py-2 bg-gray-300 text-sm text-black hidden 2xl:flex'}>
+                    {show공식 ? "HIDE" : "POP"}
+                </button>
+                <CTitle/>
+                <div className={'flex flex-col justify-start items-start gap-y-4 mb-12 p-6 border border-gray-400'}>
+                    <CBallInfo pickBallCount={당첨볼개수} setPickBallCount={set당첨볼개수}
+                               totalBallCount={총볼갯수} totalPickBallCount={set총볼갯수}
+                               bonus={보너스여부} setBonus={(value: boolean) => {
+                        set보너스여부(value);
+                        getWinRate(value, 당첨볼개수)
+                    }}
+                    />
+                    <CTicketPrice ticketPrice={티켓가격} setTicketPrice={set티켓가격}/>
+                    <CTotalTicket totalCurrencyPrice={총티켓구매수량} setTotalCurrencyPrice={set총티켓구매수량}/>
+                    <div className={'w-full flex flex-row justify-center mt-2'}>
+                        <button
+                            onClick={() => onCalculate(당첨볼개수)}
+                            className={`px-4 py-2 border ${loading ? 'text-gray-400 border-gray-400 ' : 'text-white border-white '}`}
+                            disabled={loading}
+                        >Calculate</button>
+                    </div>
+                </div>
+                <CResultTable
+                    결과값개수={결과값개수}
+                    결과기대값목록={결과기대값목록}
+                    보너스결과기대값목록={보너스결과기대값목록}
+                    당첨금액목록={당첨금액목록}
+                    set당첨금액목록={set당첨금액목록}
+                    보너스당첨금액목록={보너스당첨금액목록}
+                    set보너스당첨금액목록={set보너스당첨금액목록}
+                    당첨확률목록={당첨확률목록}
+                    보너스당첨확률목록={보너스당첨확률목록}
+                    티켓가격비율여부목록={티켓가격비율여부목록}
+                    set티켓가격비율여부목록={set티켓가격비율여부목록}
+                    보너스티켓가격비율여부목록={보너스티켓가격비율여부목록}
+                    set보너스티켓가격비율여부목록={set보너스티켓가격비율여부목록}
+                    총티켓구매금액={총티켓구매금액}
+                    보너스여부={보너스여부}
+                    set보너스여부={set보너스여부}
+                />
+                <CResultValues totalTicketPurchaseAmount={총티켓구매금액} totalPrizeAmount={결과기대값총합}/>
             </div>
-            <CResultTable
-                결과값개수={결과값개수}
-                결과기대값목록={결과기대값목록}
-                보너스결과기대값목록={보너스결과기대값목록}
-                당첨금액목록={당첨금액목록}
-                set당첨금액목록={set당첨금액목록}
-                보너스당첨금액목록={보너스당첨금액목록}
-                set보너스당첨금액목록={set보너스당첨금액목록}
-                당첨확률목록={당첨확률목록}
-                보너스당첨확률목록={보너스당첨확률목록}
-                티켓가격비율여부목록={티켓가격비율여부목록}
-                set티켓가격비율여부목록={set티켓가격비율여부목록}
-                보너스티켓가격비율여부목록={보너스티켓가격비율여부목록}
-                set보너스티켓가격비율여부목록={set보너스티켓가격비율여부목록}
-                총티켓구매금액={총티켓구매금액}
-                보너스여부={보너스여부}
-                set보너스여부={set보너스여부}
-            />
-            <CResultValues totalTicketPurchaseAmount={총티켓구매금액} totalPrizeAmount={결과기대값총합}/>
         </div>
     )
 }
