@@ -188,7 +188,7 @@ export default function Home() {
             <div className={'w-[540px] md:w-full h-auto flex flex-col justify-center items-center pt-24 pb-36'}>
                 <div
                     style={{ whiteSpace: "pre-wrap" }}
-                    className={`absolute top-0 right-0 px-4 pb-4 pt-4 w-[540px] h-auto bg-white text-sm text-black ${show공식 ? 'hidden 2xl:flex' : 'hidden'}`}>
+                    className={`absolute top-0 right-0 px-4 pb-4 pt-4 w-[540px] h-auto bg-white text-sm text-black top-10 ${show공식 ? 'hidden 2xl:flex' : 'hidden'}`}>
                     {공식}
                 </div>
                 <button

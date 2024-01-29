@@ -1,4 +1,4 @@
-import {convertToPercentage, getFloatingPointNumber} from "@/app/utils";
+import {convertToPercentage, getFloatingPointNumber} from "@/app/utils/utils";
 
 export default function CResultTableItem(
 	{

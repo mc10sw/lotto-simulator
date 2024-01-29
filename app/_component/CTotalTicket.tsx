@@ -1,4 +1,4 @@
-import {getFloatingPointNumber, getFormattedNumber, numberToKoreanWords, numberToWords} from "@/app/utils";
+import {getFloatingPointNumber, getFormattedNumber, numberToKoreanWords, numberToWords} from "@/app/utils/utils";
 
 export default function CTotalTicket(
     {totalCurrencyPrice, setTotalCurrencyPrice}:

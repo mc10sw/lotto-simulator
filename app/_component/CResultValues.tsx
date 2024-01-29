@@ -1,4 +1,4 @@
-import {getFloatingPointNumber, numberToKoreanWords, numberToWords} from "@/app/utils";
+import {getFloatingPointNumber, numberToKoreanWords, numberToWords} from "@/app/utils/utils";
 
 export default function CResultValues({ totalTicketPurchaseAmount, totalPrizeAmount}:
 {totalTicketPurchaseAmount: number, totalPrizeAmount: number}) {
